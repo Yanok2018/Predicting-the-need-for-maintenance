@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- Add to the template, for example, in the header -->
+    <nav>
+        <ul class="nav">
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('history') }}">Service History</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('predictions') }}">Predictions</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('add_repair') }}">Add Repair</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li> <!-- Logout button -->
+        </ul>
+    </nav>
+    
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service History</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+    <h2 class="text-center">Vehicle Service History</h2>
+
+    <!-- Vehicle selection and filter form -->
+    <form method="POST">
+        <div class="mb-3">
+            <label for="carSelect" class="form-label">Select Vehicle:</label>
+            <select id="carSelect" class="form-select" name="vehicle_number" onchange="this.form.submit()">
+                <option value="">All Vehicles</option>
+                {% for car in unique_cars %}
+                    <option value="{{ car }}" {% if car == selected_vehicle %} selected {% endif %}>{{ car }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="dateFilter" class="form-label">Date Filter:</label>
+            <select id="dateFilter" class="form-select" name="date_filter" onchange="this.form.submit()">
+                <option value="">No Filter</option>
+                <option value="last_month" {% if date_filter == "last_month" %} selected {% endif %}>Last Month</option>
+                <option value="last_year" {% if date_filter == "last_year" %} selected {% endif %}>Last Year</option>
+            </select>
+        </div>
+    </form>
+
+    <!-- Service history table -->
+    <table class="table table-bordered mt-4">
+        <thead class="table-dark">
+            <tr>
+                <th>Date</th>
+                <th>Vehicle Number</th>
+                <th>Mileage (km)</th>
+                <th>Failure Category</th>
+                <th>Failure Name</th>
+                <th>Symptoms</th>
+                <th>Cost (UAH)</th>
+                <th>Repair Duration (days)</th>
+                <th>Daily Mileage (km)</th>
+            </tr>
+        </thead>
+        <tbody id="historyTable">
+            {% for record in filtered_history %}
+            <tr>
+                <td>{{ record["date"] }}</td>
+                <td>{{ record["vehicle_number"] }}</td>
+                <td>{{ record["mileage"] }}</td>
+                <td>{{ record["failure_category"] }}</td>
+                <td>{{ record["failure_name"] }}</td>
+                <td>{{ record["symptoms"] }}</td>
+                <td>{{ record["cost"] }}</td>
+                <td>{{ record["repair_duration"] }}</td>
+                <td>{{ record["daily_load"] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

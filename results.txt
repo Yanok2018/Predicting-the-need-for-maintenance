@@ -1,0 +1,11 @@
+
+Vehicle: BK2218ET
+Predicted Next Failure Category: Transmission
+Probabilities of Each Category:
+- Axle: 17.07%
+- Brakes: 34.00%
+- Electrical: 7.00%
+- Engine: 5.00%
+- Suspension: 1.00%
+- Transmission: 35.93%
+Estimated Days to Next Failure: 90

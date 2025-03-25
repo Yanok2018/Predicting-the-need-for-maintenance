@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <nav>
+        <ul class="nav">
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('history') }}">Service History</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('predictions') }}">Predictions</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('add_repair') }}">Add Repair</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li> <!-- Logout button -->
+        </ul>
+    </nav>
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Failure Prediction</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+    <h2 class="text-center">Failure Prediction for Vehicle {{ selected_vehicle }}</h2>
+
+    <!-- Vehicle Selection Form -->
+    <form method="POST" action="{{ url_for('predictions') }}">
+        <div class="mb-3">
+            <label for="carSelect" class="form-label">Select Vehicle:</label>
+            <select id="carSelect" name="vehicle_number" class="form-select">
+                <option value="">All Vehicles</option>
+                {% for car in vehicle_list %}
+                    <option value="{{ car }}" {% if car == selected_vehicle %}selected{% endif %}>{{ car }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Input for days until failure -->
+        <div class="mb-3">
+            <label for="estimated_days" class="form-label">Estimated Days Until Failure:</label>
+            <input type="number" id="estimated_days" name="estimated_days" class="form-control" placeholder="Enter number of days">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Get Prediction</button>
+    </form>
+    
+    <!-- Prediction -->
+    {% if predicted_failure %}
+        <h4>Prediction for the Next Failure: {{ predicted_failure }}</h4>
+        <h5>Probabilities for Each Category:</h5>
+        <ul>
+            {% for category, probability in probabilities_dict.items() %}
+                <li>{{ category }}: {{ '%.2f' % (probability * 100) }}%</li>
+            {% endfor %}
+        </ul>
+        <h5>Estimated Days Until Failure: {{ estimated_days }} days</h5>
+    {% else %}
+        <p>Select a vehicle for the prediction.</p>
+    {% endif %}
+</body>
+</html>
